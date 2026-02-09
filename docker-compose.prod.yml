@@ -1,5 +1,3 @@
-version: '3.8'
-
 # Production docker-compose with HTTPS support via Traefik
 
 services:

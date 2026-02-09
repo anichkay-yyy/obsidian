@@ -3,7 +3,6 @@
 
 # Backend
 backend/kb-server
-backend/go.sum
 
 # Frontend
 frontend/node_modules
