@@ -1,0 +1,30 @@
+# Environment variables (contains sensitive data)
+.env
+
+# Backend
+backend/kb-server
+backend/go.sum
+
+# Frontend
+frontend/node_modules
+frontend/dist
+frontend/.vite
+
+# Static build output
+static/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Local vault (optional - uncomment if you don't want to commit vault)
+# vault/

@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior-y: contain;
+    /* Prevent text selection on mobile during swipe */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  /* Allow text selection in editor and content areas */
+  .cm-editor,
+  .markdown-preview,
+  input,
+  textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  /* Prevent zoom on iOS inputs */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+  @media (min-width: 768px) {
+    input,
+    textarea,
+    select {
+      font-size: 14px;
+    }
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0C0F16;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #284CAC;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a5dc4;
+}
+
+/* Markdown preview styles */
+.markdown-preview {
+  @apply text-foreground;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.markdown-preview h1 {
+  @apply text-2xl md:text-3xl font-bold mt-4 md:mt-6 mb-3 md:mb-4;
+}
+
+.markdown-preview h2 {
+  @apply text-xl md:text-2xl font-bold mt-4 md:mt-5 mb-2 md:mb-3;
+}
+
+.markdown-preview h3 {
+  @apply text-lg md:text-xl font-bold mt-3 md:mt-4 mb-2;
+}
+
+.markdown-preview p {
+  @apply mb-3 md:mb-4 text-sm md:text-base;
+}
+
+.markdown-preview a {
+  @apply text-primary underline hover:text-accent break-words;
+}
+
+.markdown-preview code {
+  @apply bg-secondary px-1 py-0.5 rounded text-xs md:text-sm;
+  word-break: break-word;
+}
+
+.markdown-preview pre {
+  @apply bg-secondary p-2 md:p-4 rounded-lg overflow-x-auto mb-3 md:mb-4 text-xs md:text-sm;
+}
+
+.markdown-preview pre code {
+  @apply p-0;
+}
+
+.markdown-preview ul, .markdown-preview ol {
+  @apply mb-3 md:mb-4 ml-4 md:ml-6 text-sm md:text-base;
+}
+
+.markdown-preview li {
+  @apply mb-1;
+}
+
+.markdown-preview blockquote {
+  @apply border-l-4 border-primary pl-3 md:pl-4 italic my-3 md:my-4 text-sm md:text-base;
+}
+
+.markdown-preview table {
+  @apply w-full overflow-x-auto block md:table text-xs md:text-sm;
+}
+
+.markdown-preview img {
+  @apply max-w-full h-auto;
+}
+
+/* Mobile touch targets */
+@media (max-width: 768px) {
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

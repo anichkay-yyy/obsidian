@@ -1,0 +1,35 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="96" fill="#0C0F16"/>
+
+  <!-- Graph network visualization -->
+  <!-- Outer nodes -->
+  <circle cx="128" cy="128" r="32" fill="#284CAC" opacity="0.9"/>
+  <circle cx="384" cy="128" r="32" fill="#284CAC" opacity="0.9"/>
+  <circle cx="256" cy="384" r="32" fill="#284CAC" opacity="0.9"/>
+
+  <!-- Additional nodes -->
+  <circle cx="128" cy="384" r="24" fill="#4a6bc4" opacity="0.8"/>
+  <circle cx="384" cy="384" r="24" fill="#4a6bc4" opacity="0.8"/>
+  <circle cx="256" cy="128" r="24" fill="#4a6bc4" opacity="0.8"/>
+
+  <!-- Connection lines -->
+  <line x1="128" y1="128" x2="384" y2="128" stroke="#284CAC" stroke-width="12" opacity="0.6"/>
+  <line x1="128" y1="128" x2="256" y2="384" stroke="#284CAC" stroke-width="12" opacity="0.6"/>
+  <line x1="384" y1="128" x2="256" y2="384" stroke="#284CAC" stroke-width="12" opacity="0.6"/>
+
+  <line x1="128" y1="128" x2="128" y2="384" stroke="#4a6bc4" stroke-width="8" opacity="0.5"/>
+  <line x1="384" y1="128" x2="384" y2="384" stroke="#4a6bc4" stroke-width="8" opacity="0.5"/>
+  <line x1="256" y1="128" x2="256" y2="384" stroke="#4a6bc4" stroke-width="8" opacity="0.5"/>
+
+  <line x1="128" y1="384" x2="256" y2="384" stroke="#4a6bc4" stroke-width="8" opacity="0.5"/>
+  <line x1="256" y1="384" x2="384" y2="384" stroke="#4a6bc4" stroke-width="8" opacity="0.5"/>
+
+  <!-- Central highlight node -->
+  <circle cx="256" cy="256" r="40" fill="#e4e4e7" opacity="0.95"/>
+  <circle cx="256" cy="256" r="28" fill="#284CAC"/>
+
+  <!-- Inner glow effect -->
+  <circle cx="256" cy="256" r="20" fill="#6a8bd4"/>
+  <circle cx="256" cy="256" r="12" fill="#e4e4e7"/>
+</svg>

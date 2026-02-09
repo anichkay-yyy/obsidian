@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  kb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: knowledge-base:latest
+    container_name: knowledge-base
+    ports:
+      - "33005:8080"
+    volumes:
+      - ./vault:/data/vault:rw
+    environment:
+      - KB_AUTH_USER=${KB_AUTH_USER:-admin}
+      - KB_AUTH_PASS=${KB_AUTH_PASS:-changeme}
+      - KB_VAULT_PATH=/data/vault
+      - KB_PORT=8080
+      - KB_STATIC_DIR=/app/static
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.knowledge-base.description=Lightweight self-hosted knowledge base"
+      - "com.knowledge-base.version=1.0.0"
+    networks:
+      - kb-network
+
+networks:
+  kb-network:
+    driver: bridge

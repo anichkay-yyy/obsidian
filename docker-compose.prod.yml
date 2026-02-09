@@ -1,0 +1,66 @@
+version: '3.8'
+
+# Production docker-compose with HTTPS support via Traefik
+
+services:
+  kb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: knowledge-base:latest
+    container_name: knowledge-base
+    ports:
+      - "33005:8080"
+    volumes:
+      - ./vault:/data/vault:rw
+    environment:
+      - KB_AUTH_USER=${KB_AUTH_USER:-admin}
+      - KB_AUTH_PASS=${KB_AUTH_PASS:-changeme}
+      - KB_VAULT_PATH=/data/vault
+      - KB_PORT=8080
+      - KB_STATIC_DIR=/app/static
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kb.rule=Host(`kb.yourdomain.com`)"
+      - "traefik.http.routers.kb.entrypoints=websecure"
+      - "traefik.http.routers.kb.tls.certresolver=letsencrypt"
+      - "traefik.http.services.kb.loadbalancer.server.port=8080"
+    networks:
+      - kb-network
+      - traefik-network
+
+  # Опционально: Traefik для HTTPS
+  # traefik:
+  #   image: traefik:v2.10
+  #   container_name: traefik
+  #   command:
+  #     - "--api.insecure=true"
+  #     - "--providers.docker=true"
+  #     - "--entrypoints.web.address=:80"
+  #     - "--entrypoints.websecure.address=:443"
+  #     - "--certificatesresolvers.letsencrypt.acme.email=your@email.com"
+  #     - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+  #     - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #     - "8081:8080"  # Traefik dashboard
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - ./letsencrypt:/letsencrypt
+  #   networks:
+  #     - traefik-network
+
+networks:
+  kb-network:
+    driver: bridge
+  traefik-network:
+    external: true
+    # Создайте сеть: docker network create traefik-network
