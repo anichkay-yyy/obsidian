@@ -4,7 +4,7 @@ import useStore from '@/store/useStore'
 import { Node, Edge } from '@/lib/api'
 
 export default function Graph() {
-  const { graph, loadGraph, setSelectedNode, loadFile } = useStore()
+  const { graph, loadGraph, setSelectedNode, loadFile, toggleGraph } = useStore()
   const graphRef = useRef<any>()
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 })
 
@@ -28,6 +28,19 @@ export default function Graph() {
   useEffect(() => {
     loadGraph()
   }, [loadGraph])
+
+  // Настройка физики графа
+  useEffect(() => {
+    if (graphRef.current && graph) {
+      // Настраиваем силы d3
+      graphRef.current.d3Force('charge').strength(-300)
+      graphRef.current.d3Force('link').distance(150)
+      graphRef.current.d3Force('center').strength(0.1)
+
+      // Перезапускаем симуляцию
+      graphRef.current.d3ReheatSimulation()
+    }
+  }, [graph])
 
   if (!graph) {
     return (
@@ -56,6 +69,8 @@ export default function Graph() {
       setSelectedNode(graphNode)
       if (graphNode.type === 'file') {
         loadFile(graphNode.path)
+        // Закрыть граф и показать редактор
+        toggleGraph()
       }
     }
   }
@@ -73,13 +88,13 @@ export default function Graph() {
         }}
         nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
           const label = node.name
-          const fontSize = Math.max(10, 12 / globalScale)
+          const fontSize = Math.max(12, 14 / globalScale)
           ctx.font = `${fontSize}px Sans-Serif`
           const textWidth = ctx.measureText(label).width
           const bckgDimensions = [textWidth, fontSize].map((n) => n + fontSize * 0.4)
 
-          // Draw node shape
-          const size = node.type === 'directory' ? 6 : 4
+          // Draw node shape - увеличены размеры
+          const size = node.type === 'directory' ? 10 : 8
 
           if (node.type === 'directory') {
             // Square for directories
@@ -104,17 +119,17 @@ export default function Graph() {
           ctx.fillStyle = '#0C0F16'
           ctx.fillRect(
             node.x - bckgDimensions[0] / 2,
-            node.y + size + 2,
+            node.y + size + 4,
             bckgDimensions[0],
             bckgDimensions[1]
           )
 
           ctx.fillStyle = '#e4e4e7'
-          ctx.fillText(label, node.x, node.y + size + 2 + fontSize / 2)
+          ctx.fillText(label, node.x, node.y + size + 4 + fontSize / 2)
         }}
         linkColor={() => '#284CAC'}
-        linkWidth={1}
-        linkDirectionalArrowLength={3}
+        linkWidth={2}
+        linkDirectionalArrowLength={4}
         linkDirectionalArrowRelPos={1}
         onNodeClick={handleNodeClick}
         backgroundColor="#000000"
@@ -122,9 +137,11 @@ export default function Graph() {
         enableNodeDrag={true}
         enableZoomInteraction={true}
         enablePanInteraction={true}
+        d3AlphaDecay={0.02}
+        d3VelocityDecay={0.3}
         onEngineStop={() => {
           if (graphRef.current) {
-            graphRef.current.zoomToFit(400, 50)
+            graphRef.current.zoomToFit(400, 80)
           }
         }}
       />

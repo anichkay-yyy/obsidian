@@ -15,6 +15,7 @@
     "@codemirror/lang-markdown": "^6.2.4",
     "@codemirror/state": "^6.4.0",
     "@codemirror/view": "^6.23.1",
+    "@uiw/codemirror-theme-vscode": "^4.25.4",
     "@uiw/react-codemirror": "^4.21.21",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

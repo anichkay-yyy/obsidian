@@ -19,7 +19,7 @@ mermaid.initialize({
 })
 
 export default function Preview() {
-  const { currentFile, api } = useStore()
+  const { currentFile, api, loadFile } = useStore()
   const [html, setHtml] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -92,11 +92,56 @@ export default function Preview() {
     )
   }
 
+  // Handle clicks on wikilinks
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement
+
+    // Check if clicked element is a link
+    const link = target.closest('a')
+    if (!link) return
+
+    const href = link.getAttribute('href')
+    if (!href) return
+
+    // Check if it's an external link
+    if (href.startsWith('http://') || href.startsWith('https://')) {
+      // External link - open in new tab
+      e.preventDefault()
+      window.open(href, '_blank', 'noopener,noreferrer')
+      return
+    }
+
+    // Check if it's an internal wikilink (starts with / or is relative)
+    if (href.startsWith('/') || (!href.includes('://') && !href.startsWith('#'))) {
+      e.preventDefault()
+
+      // Extract file path from href
+      let filePath = href.startsWith('/') ? href.substring(1) : href
+
+      // Skip directory links (end with /)
+      if (filePath.endsWith('/')) {
+        console.log('Directory link clicked:', filePath)
+        // TODO: Show directory contents in future
+        return
+      }
+
+      // If it doesn't end with .md, add it
+      if (!filePath.endsWith('.md')) {
+        filePath = filePath + '.md'
+      }
+
+      // Load the file
+      console.log('Loading file from wikilink:', filePath)
+      loadFile(filePath)
+    }
+  }
+
   return (
     <div className="h-full overflow-y-auto p-6">
       <div
         className="markdown-preview max-w-4xl mx-auto"
         dangerouslySetInnerHTML={{ __html: html }}
+        onClick={handleClick}
       />
     </div>
   )

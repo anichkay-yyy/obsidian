@@ -1,35 +1,25 @@
 import { useEffect } from 'react'
 import CodeMirror from '@uiw/react-codemirror'
 import { markdown } from '@codemirror/lang-markdown'
+import { vscodeDark } from '@uiw/codemirror-theme-vscode'
 import { EditorView } from '@codemirror/view'
 import useStore from '@/store/useStore'
 
-const theme = EditorView.theme({
+// Custom theme overrides to match app colors
+const customTheme = EditorView.theme({
   '&': {
-    backgroundColor: '#000000',
-    color: '#e4e4e7',
+    backgroundColor: '#1e1e1e', // VSCode dark background
     height: '100%',
   },
-  '.cm-content': {
-    caretColor: '#284CAC',
-    fontFamily: 'monospace',
+  '.cm-gutters': {
+    backgroundColor: '#1e1e1e',
+    border: 'none',
   },
   '.cm-cursor, .cm-dropCursor': {
     borderLeftColor: '#284CAC',
   },
   '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': {
     backgroundColor: '#284CAC40',
-  },
-  '.cm-activeLine': {
-    backgroundColor: '#0C0F16',
-  },
-  '.cm-gutters': {
-    backgroundColor: '#000000',
-    color: '#71717a',
-    border: 'none',
-  },
-  '.cm-activeLineGutter': {
-    backgroundColor: '#0C0F16',
   },
 })
 
@@ -62,13 +52,15 @@ export default function Editor() {
       <CodeMirror
         value={currentContent}
         height="100%"
-        extensions={[markdown(), theme]}
+        theme={vscodeDark}
+        extensions={[markdown(), customTheme]}
         onChange={(value) => setCurrentContent(value)}
         basicSetup={{
           lineNumbers: true,
           highlightActiveLineGutter: true,
           highlightActiveLine: true,
           foldGutter: true,
+          syntaxHighlighting: true,
         }}
       />
     </div>
